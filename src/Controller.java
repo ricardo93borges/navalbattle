@@ -27,6 +27,7 @@ public class Controller{
 	    slots--;
 	}
 
+	//Insert
         slots = ship.getSlots();
         while (slots > 0){
             matrix.set(ship.getSlug(), row, column);
@@ -41,7 +42,9 @@ public class Controller{
 
     public boolean attack(Matrix matrix, int row, int column){
         try{
-            String target = matrix.get(row, column);
+	    if(matrix.get(row, column) == null){
+		return false;
+	    }
             matrix.set("X", row, column);
             return true;
         }catch (ArrayIndexOutOfBoundsException e){
