@@ -1,11 +1,9 @@
 /**
  * Created by ricardo on 21/05/16.
  */
-public class Controller {
+public class Controller{
 
-    public void insertShip(Ship ship, Matrix matrix, int row, int column){
-        matrix.set(ship.getSlug(), row, column);
-
+    public void insertShip(Ship ship, Matrix matrix, int row, int column) throws NavalBattleException{
         //validate and repositioning if necessary
         if(ship.getOrientation() == 'H'){
             int h = (row+ship.getSlots())-1;
@@ -19,7 +17,17 @@ public class Controller {
             }
         }
 
-        int slots = ship.getSlots();
+	//Check if it already has an element
+	int slots = ship.getSlots();
+        while (slots > 0){
+	    if(matrix.get(row,column) != null){
+		System.out.println(matrix.get(row,column));
+		throw new NavalBattleException("Posição inválida, slots ocupados.");
+            }
+	    slots--;
+	}
+
+        slots = ship.getSlots();
         while (slots > 0){
             matrix.set(ship.getSlug(), row, column);
             slots--;

@@ -9,10 +9,13 @@ public class Main {
         Matrix m = new Matrix(10,10);
         Ship s = new Ship("S4", 4, 'H');
         Ship s2 = new Ship("T3", 3, 'V');
-
-        controller.insertShip(s, m, 1, 1);
-        controller.insertShip(s2, m, 2, 1);
-
+	
+	try{
+            controller.insertShip(s, m, 1, 1);
+            controller.insertShip(s2, m, 2, 1);
+	}catch(NavalBattleException e){
+	     System.out.println(e.getMessage());
+	}
         System.out.println(m.display());
 
         try {
