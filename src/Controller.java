@@ -3,8 +3,10 @@
  */
 public class Controller{
 
-    public void insertShip(Ship ship, Matrix matrix, int row, int column) throws NavalBattleException{
+    public void insertShip(Ship ship, Matrix matrix, int row, String col) throws NavalBattleException{
         //validate and repositioning if necessary
+	int column = matrix.getColumn(col);
+	//System.out.println(matrix.get(row,column));
         if(ship.getOrientation() == 'H'){
             int h = (row+ship.getSlots())-1;
             if(h > matrix.getRows()){
@@ -21,7 +23,6 @@ public class Controller{
 	int slots = ship.getSlots();
         while (slots > 0){
 	    if(matrix.get(row,column) != null){
-		System.out.println(matrix.get(row,column));
 		throw new NavalBattleException("Posição inválida, slots ocupados.");
             }
 	    slots--;
@@ -40,8 +41,9 @@ public class Controller{
         }
     }
 
-    public boolean attack(Matrix matrix, int row, int column){
+    public boolean attack(Matrix matrix, int row, String col){
         try{
+	    int column = matrix.getColumn(col);
 	    if(matrix.get(row, column) == null){
 		return false;
 	    }

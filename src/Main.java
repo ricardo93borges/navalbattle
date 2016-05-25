@@ -3,10 +3,20 @@
  */
 public class Main {
 
+    public static Matrix init(){
+	try{
+                Matrix m = new Matrix(10,10);
+		return m;
+        }catch(NavalBattleException e){
+                System.out.println(e.getMessage());
+		return null;
+        }
+    }
+
     public static void main(String[] args){
         Controller controller = new Controller();
+	Matrix m = init();
 
-        Matrix m = new Matrix(10,10);
         Ship s = new Ship("S4", 4, 'H');
         Ship s2 = new Ship("T3", 3, 'V');
 	//Insert Ship

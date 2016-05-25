@@ -11,7 +11,10 @@ public class Matrix {
     Map<String, Integer> mapColumns = new HashMap<String, Integer>();
 
 
-    public Matrix(int rows, int columns) {
+    public Matrix(int rows, int columns) throws NavalBattleException{
+	if(rows > 10 || columns > 10){
+		throw new NavalBattleException("Only 10x10 Matrix is allowed");
+	}
         this.rows = rows;
         this.columns = columns;
         this.matrix = new String[rows][columns];
