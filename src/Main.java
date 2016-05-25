@@ -11,8 +11,8 @@ public class Main {
         Ship s2 = new Ship("T3", 3, 'V');
 	//Insert Ship
 	try{
-            controller.insertShip(s, m, 1, 1);
-            controller.insertShip(s2, m, 2, 1);
+            controller.insertShip(s, m, 1, "a");
+            controller.insertShip(s2, m, 2, "b");
 	}catch(NavalBattleException e){
 	     System.out.println(e.getMessage());
 	}
@@ -20,9 +20,9 @@ public class Main {
         System.out.println(m.display());
 
 	//Attack and hit
-	attack(controller, m, 1,1);
+	attack(controller, m, 1,"a");
 	//Attack and miss
-        attack(controller, m, 3,0);
+        attack(controller, m, 3,"c");
 
 	//Display Matrix
         System.out.println(m.display());
@@ -30,14 +30,15 @@ public class Main {
 	//Get element
         try {
             System.out.println(m.get(5,5));
+	    System.out.println(m.get(1,"a"));
         }catch (ArrayIndexOutOfBoundsException e){
             System.out.println("ArrayIndexOutOfBoundsException");
         }
 
     }
 
-    public static void attack(Controller controller, Matrix m, int row, int column ){
-	if(controller.attack(m, row,column)){
+    public static void attack(Controller controller, Matrix m, int row, String column ){
+	if(controller.attack(m, row, column)){
             System.out.println("Hit");
         }else{
 	    System.out.println("Water!!!");

@@ -1,16 +1,43 @@
 /**
  * Created by ricardo on 21/05/16.
  */
+import java.util.HashMap;
+import java.util.Map;
 public class Matrix {
 
     private int rows;
     private int columns;
     private String[][] matrix;
+    Map<String, Integer> mapColumns = new HashMap<String, Integer>();
+
 
     public Matrix(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
         this.matrix = new String[rows][columns];
+	this.initMapColumns();
+    }
+
+    private void initMapColumns(){
+	mapColumns.put("a", 0);
+	mapColumns.put("b", 1);
+	mapColumns.put("c", 2);
+        mapColumns.put("d", 3);
+        mapColumns.put("f", 4);
+        mapColumns.put("g", 5);
+        mapColumns.put("h", 6);
+        mapColumns.put("i", 7);
+        mapColumns.put("j", 8);
+        mapColumns.put("k", 9);
+        mapColumns.put("l", 10);
+    }
+
+    public int getColumn(String letter){
+	try{
+		return this.mapColumns.get(letter);
+	}catch(NullPointerException e){
+		throw new NullPointerException();		
+	}
     }
 
     public int getRows() {
@@ -44,6 +71,15 @@ public class Matrix {
 
     public String get(int row, int column) throws ArrayIndexOutOfBoundsException{
         try {
+            return this.matrix[row][column];
+        }catch (ArrayIndexOutOfBoundsException e){
+            throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+
+     public String get(int row, String col) throws ArrayIndexOutOfBoundsException{
+        try {
+	    int column = this.getColumn(col);
             return this.matrix[row][column];
         }catch (ArrayIndexOutOfBoundsException e){
             throw new ArrayIndexOutOfBoundsException();
