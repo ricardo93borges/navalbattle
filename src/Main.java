@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 
+/**
+*TODO motodo para distribuir embarcações aleatoreamente
+**/
 public class Main {
 
     public static Matrix init(){
@@ -31,6 +34,7 @@ public class Main {
 	boolean invalid=true;
 
 	for(Ship ship : ships){
+		invalid = true;
 		while(invalid){
 			System.out.println("Embarcação "+ship.getName()+", "+ship.getSlots()+" slots.");
 			System.out.println("Informe a orientação: \n h - Horizontal \n v - Vertical");
@@ -45,7 +49,6 @@ public class Main {
 		}
 
 		invalid = true;
-
 		while(invalid){
 			Set columns = m.getColumnsLetters();
 			System.out.println("Informe a coluna:");
@@ -63,27 +66,44 @@ public class Main {
 
 		invalid = true;
 		while(invalid){
-			System.out.println("Informe linha:");
+			System.out.println("Informe a linha:");
 			for(int i=0; i < m.getRows(); i++){
 				System.out.print(i+",");
 			}
-			if(scanner.hasNextInt()){
-				System.out.println();
-				row = scanner.nextInt();
-				if(row <= m.getRows()-1){
-					invalid = false;
-				}
+			System.out.println();
+			String input = scanner.nextLine();
+			row = stringToInt(input);
+			if(row >= 0 && row <= m.getRows()-1){
+				invalid = false;
+				clearConsole();
+			}else{
+				clearConsole();
+                                System.out.println("Linha informada inválida.\n");
 			}
 		}
-	
-		System.out.println("o:"+orientation);
-		System.out.println("c"+column);
-		System.out.println("r"+row);
 	}
+	m.display();
+    }
 
+    public static boolean insertShip(Controller c, Matrix m, Ship s, int row, String col){
+	try{
+		c.insertShip(s,m,row,col);
+		return true;
+	}catch(NavalBattleException e){
+		return false;
+	}
+    }
 
-
-
+    public static int stringToInt(String s){
+	int n;
+	try { 
+        	n = Integer.parseInt(s); 
+    	} catch(NumberFormatException e) { 
+        	return -1; 
+    	} catch(NullPointerException e) {
+        	return -1;
+    	}
+	    return n;
     }
 
     public static void attack(Controller controller, Matrix m, int row, String column ){
