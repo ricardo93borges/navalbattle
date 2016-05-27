@@ -3,6 +3,8 @@
  */
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
 public class Matrix {
 
     private int rows;
@@ -26,13 +28,12 @@ public class Matrix {
 	mapColumns.put("b", 1);
 	mapColumns.put("c", 2);
         mapColumns.put("d", 3);
-        mapColumns.put("f", 4);
-        mapColumns.put("g", 5);
-        mapColumns.put("h", 6);
-        mapColumns.put("i", 7);
-        mapColumns.put("j", 8);
-        mapColumns.put("k", 9);
-        mapColumns.put("l", 10);
+        mapColumns.put("e", 4);
+        mapColumns.put("f", 5);
+        mapColumns.put("g", 6);
+        mapColumns.put("h", 7);
+        mapColumns.put("i", 8);
+        mapColumns.put("j", 9);
     }
 
     public int getColumn(String letter){
@@ -49,6 +50,10 @@ public class Matrix {
 
     public void setRows(int rows) {
         this.rows = rows;
+    }
+
+    public Set getColumnsLetters(){
+	return mapColumns.keySet();
     }
 
     public int getColumns() {
@@ -90,7 +95,7 @@ public class Matrix {
     }
 
     public String display(){
-        String display = "|~|A|B|C|D|E|J|H|I|J|L| \n";
+        String display = "|~|A|B|C|D|E|F|G|H|I|J| \n";
 
         for(int i=0; i < matrix.length; i++){
             display += "|"+i+"|";

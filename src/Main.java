@@ -1,6 +1,11 @@
 /**
  * Created by ricardo on 21/05/16.
  */
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+
 public class Main {
 
     public static Matrix init(){
@@ -14,36 +19,70 @@ public class Main {
     }
 
     public static void main(String[] args){
+	Scanner scanner = new Scanner(System.in);
         Controller controller = new Controller();
 	Matrix m = init();
+	
+	ArrayList<Ship> ships = controller.setShips();
 
-        Ship s = new Ship("S4", 4, 'H');
-        Ship s2 = new Ship("T3", 3, 'V');
-	//Insert Ship
-	try{
-            controller.insertShip(s, m, 1, "a");
-            controller.insertShip(s2, m, 2, "b");
-	}catch(NavalBattleException e){
-	     System.out.println(e.getMessage());
+	String orientation="";
+	String column="";
+	int row=0;
+	boolean invalid=true;
+
+	for(Ship ship : ships){
+		while(invalid){
+			System.out.println("Embarcação "+ship.getName()+", "+ship.getSlots()+" slots.");
+			System.out.println("Informe a orientação: \n h - Horizontal \n v - Vertical");
+			orientation = scanner.nextLine();
+			if(orientation.equals("h") || orientation.equals("v")){
+				invalid = false;
+				clearConsole();
+			}else{
+				clearConsole();
+				System.out.println("Orientação informada inválida, informe h ou v. \n");
+			}
+		}
+
+		invalid = true;
+
+		while(invalid){
+			Set columns = m.getColumnsLetters();
+			System.out.println("Informe a coluna:");
+			System.out.println("Colunas: "+columns.toString());
+                	column = scanner.nextLine();
+			
+			if(columns.contains(column)){
+				invalid = false;
+				clearConsole();
+			}else{
+				clearConsole();
+                                System.out.println("Coluna informada inválida.\n");
+			}
+		}
+
+		invalid = true;
+		while(invalid){
+			System.out.println("Informe linha:");
+			for(int i=0; i < m.getRows(); i++){
+				System.out.print(i+",");
+			}
+			if(scanner.hasNextInt()){
+				System.out.println();
+				row = scanner.nextInt();
+				if(row <= m.getRows()-1){
+					invalid = false;
+				}
+			}
+		}
+	
+		System.out.println("o:"+orientation);
+		System.out.println("c"+column);
+		System.out.println("r"+row);
 	}
-	//Display Matrix
-        System.out.println(m.display());
 
-	//Attack and hit
-	attack(controller, m, 1,"a");
-	//Attack and miss
-        attack(controller, m, 3,"c");
 
-	//Display Matrix
-        System.out.println(m.display());
 
-	//Get element
-        try {
-            System.out.println(m.get(5,5));
-	    System.out.println(m.get(1,"a"));
-        }catch (ArrayIndexOutOfBoundsException e){
-            System.out.println("ArrayIndexOutOfBoundsException");
-        }
 
     }
 
@@ -54,4 +93,15 @@ public class Main {
 	    System.out.println("Water!!!");
         }
     }
+
+    public static void clearConsole(){
+	if(System.getProperty("os.name").equals("Linux")){
+		System.out.print("\033[H\033[2J");
+	}else{
+		for(int i=0; i<40; i++){
+			System.out.println();
+		}
+	}
+    }
+
 }

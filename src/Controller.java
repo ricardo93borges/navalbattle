@@ -1,6 +1,7 @@
 /**
  * Created by ricardo on 21/05/16.
  */
+import java.util.ArrayList;
 public class Controller{
 
     public void insertShip(Ship ship, Matrix matrix, int row, String col) throws NavalBattleException{
@@ -52,6 +53,15 @@ public class Controller{
         }catch (ArrayIndexOutOfBoundsException e){
             return false;
         }
+    }
+
+    public ArrayList<Ship> setShips(){
+	ArrayList<Ship> ships = new ArrayList<Ship>();
+	ships.add(new Ship("A", 5, 'H'));
+        ships.add(new Ship("B", 4, 'H'));
+        ships.add(new Ship("C", 3, 'H'));
+       	ships.add(new Ship("D", 2, 'H'));
+	return ships;
     }
 
 }
