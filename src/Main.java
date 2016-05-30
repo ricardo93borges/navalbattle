@@ -7,11 +7,13 @@ import java.util.Arrays;
 import java.util.Set;
 
 /**
-*TODO motodo para distribuir embarcações aleatoreamente
+*TODO finalizar motodo para distribuir embarcações aleatoreamente, 
+* distribuir verticalmente
+* redistribuir em exceptions
 **/
 public class Main {
 
-    public static Matrix init(){
+ /*   public static Matrix init(){
 	try{
                 Matrix m = new Matrix(10,10);
 		return m;
@@ -20,14 +22,26 @@ public class Main {
 		return null;
         }
     }
-
+*/
     public static void main(String[] args){
 	Scanner scanner = new Scanner(System.in);
         Controller controller = new Controller();
-	Matrix m = init();
-	
-	ArrayList<Ship> ships = controller.setShips();
+	//Matrix m = init();
+        Matrix m = new Matrix(10,10);
 
+	System.out.println(m.display());
+	ArrayList<Ship> ships = controller.setShips();
+	controller.randomInsertShips(m, ships);
+	System.out.println(m.display());
+    }
+/*
+    public static void test(){
+	Scanner scanner = new Scanner(System.in);
+        Controller controller = new Controller();
+        Matrix m = init();
+
+        ArrayList<Ship> ships = controller.setShips();
+	
 	String orientation="";
 	String column="";
 	int row=0;
@@ -82,9 +96,8 @@ public class Main {
 			}
 		}
 	}
-	m.display();
     }
-
+*/
     public static boolean insertShip(Controller c, Matrix m, Ship s, int row, String col){
 	try{
 		c.insertShip(s,m,row,col);
