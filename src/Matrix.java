@@ -1,6 +1,7 @@
 /**
  * Created by ricardo on 21/05/16.
  */
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -13,20 +14,20 @@ public class Matrix {
     Map<String, Integer> mapColumns = new HashMap<String, Integer>();
 
 
-    public Matrix(int rows, int columns) {//throws NavalBattleException{
-	/*if(rows > 10 || columns > 10){
-		throw new NavalBattleException("Only 10x10 Matrix is allowed");
-	}*/
+    public Matrix(int rows, int columns) throws NavalBattleException {
+        if (rows > 10 || columns > 10) {
+            throw new NavalBattleException("Only 10x10 Matrix is allowed");
+        }
         this.rows = rows;
         this.columns = columns;
         this.matrix = new String[rows][columns];
-	this.initMapColumns();
+        this.initMapColumns();
     }
 
-    private void initMapColumns(){
-	mapColumns.put("a", 0);
-	mapColumns.put("b", 1);
-	mapColumns.put("c", 2);
+    private void initMapColumns() {
+        mapColumns.put("a", 0);
+        mapColumns.put("b", 1);
+        mapColumns.put("c", 2);
         mapColumns.put("d", 3);
         mapColumns.put("e", 4);
         mapColumns.put("f", 5);
@@ -36,12 +37,12 @@ public class Matrix {
         mapColumns.put("j", 9);
     }
 
-    public int getColumn(String letter){
-	try{
-		return this.mapColumns.get(letter);
-	}catch(NullPointerException e){
-		throw new NullPointerException();		
-	}
+    public int getColumn(String letter) {
+        try {
+            return this.mapColumns.get(letter);
+        } catch (NullPointerException e) {
+            throw new NullPointerException();
+        }
     }
 
     public int getRows() {
@@ -52,8 +53,8 @@ public class Matrix {
         this.rows = rows;
     }
 
-    public Set getColumnsLetters(){
-	return mapColumns.keySet();
+    public Set getColumnsLetters() {
+        return mapColumns.keySet();
     }
 
     public int getColumns() {
@@ -64,11 +65,12 @@ public class Matrix {
         this.columns = columns;
     }
 
-    public boolean set(String element, int row, int column){
-        if(row > this.matrix.length){
+    public boolean set(String element, int row, int column) {
+        if (row > this.matrix.length) {
             return false;
         }
-        if(column > this.matrix[row].length){
+        System.out.println("row:"+row);
+        if (column > this.matrix[row].length) {
             return false;
         }
 
@@ -77,31 +79,31 @@ public class Matrix {
         return true;
     }
 
-    public String get(int row, int column) throws ArrayIndexOutOfBoundsException{
+    public String get(int row, int column) throws ArrayIndexOutOfBoundsException {
         try {
             return this.matrix[row][column];
-        }catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException();
         }
     }
 
-     public String get(int row, String col) throws ArrayIndexOutOfBoundsException{
+    public String get(int row, String col) throws ArrayIndexOutOfBoundsException {
         try {
-	    int column = this.getColumn(col);
+            int column = this.getColumn(col);
             return this.matrix[row][column];
-        }catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException();
         }
     }
 
-    public String display(){
+    public String display() {
         String display = "|~|A|B|C|D|E|F|G|H|I|J| \n";
 
-        for(int i=0; i < matrix.length; i++){
-            display += "|"+i+"|";
-            for(int j=0; j < matrix[i].length; j++){
+        for (int i = 0; i < matrix.length; i++) {
+            display += "|" + i + "|";
+            for (int j = 0; j < matrix[i].length; j++) {
                 String element = (matrix[i][j] != null) ? matrix[i][j] : "~";
-                display += element+"|";
+                display += element + "|";
             }
             display += "\n";
         }
