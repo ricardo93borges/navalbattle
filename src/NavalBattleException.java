@@ -1,3 +1,4 @@
+package bn;
 public class NavalBattleException extends Exception {
 	public NavalBattleException() { 
 		super(); 

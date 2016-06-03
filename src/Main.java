@@ -1,3 +1,4 @@
+package bn;
 /**
  * Created by ricardo on 21/05/16.
  */
@@ -27,12 +28,83 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Controller controller = new Controller();
-        Matrix m = init();
+        Matrix playerMatrix = init();
+        Matrix computerMatrix = init();
 
-        System.out.println(m.display());
         ArrayList<Ship> ships = controller.setShips();
-        controller.randomInsertShips(m, ships);
-        System.out.println(m.display());
+        
+        controller.randomInsertShips(playerMatrix, ships);
+        controller.randomInsertShips(computerMatrix, ships);
+        
+        System.out.println(computerMatrix.display());
+        System.out.println(playerMatrix.display());
+        
+        boolean run = true;
+        int opt;
+        String column = "";
+        int row = 0;
+        
+        int playerPoints = 0;
+        int computerPoints = 0;
+        
+        while(run){
+            System.out.println("Placar ==> Você: "+playerPoints+"/14 | Adversário: "+computerPoints+"/14");
+            System.out.println("Digite 1 para atacar ou 0 para sair.");
+            opt = scanner.nextInt();
+            
+            if(opt==0){
+                run = false;
+            }else{
+                boolean valid = false;
+                
+                while(!valid){
+                    System.out.println("Digite a coluna:");
+                    column = scanner.next();
+                    if(computerMatrix.mapColumns.get(column) != null){
+                        valid = true;
+                    }
+                }
+                
+                valid = false;
+                while(!valid){
+                    System.out.println("Digite a linha:");
+                    if(scanner.hasNextInt()){
+                        row = scanner.nextInt();
+                        if(row >= 0 || row <= 9){
+                            valid = true;
+                        }
+                    }else{
+                        scanner.next();
+                    }
+                }
+                if(controller.attack(computerMatrix, row, column)){
+                    playerPoints++;
+                    System.out.println("Hit!");
+                }else{
+                    System.out.println("Water!");
+                }
+                //Computer attack                
+                if(controller.randomAttack(playerMatrix)){
+                    System.out.println("Adversário acertou!");
+                    computerPoints++;
+                }else{
+                    System.out.println("Adversário errou!");
+                }
+                
+                //Display
+                System.out.println(computerMatrix.display());
+                System.out.println(playerMatrix.display());
+                
+                //Check points
+                if(playerPoints >= 14){
+                    System.out.println("Você venceu !!!");
+                    run = false;
+                }else if(computerPoints >= 14){
+                    System.out.println("Seu adversário venceu !!!");
+                    run = false;
+                }
+            }
+        }
     }
 
     /*

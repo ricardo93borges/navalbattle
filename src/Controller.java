@@ -1,3 +1,4 @@
+package bn;
 /**
  * Created by ricardo on 21/05/16.
  */
@@ -84,7 +85,6 @@ public class Controller {
                 int o = r.nextInt(2);
                 if (o > 1) o = o - 1;
                 char orientation = orientations[o];
-                System.out.println(orientation);
                 ship.setOrientation(orientation);
                 int n = r.nextInt(9);
                 String l = columns[n];
@@ -104,6 +104,27 @@ public class Controller {
         if (remaining.size() > 0) {
             randomInsertShips(m, remaining);
         }
+    }
+    
+     /**
+     * Randomly attack
+     * @param m Matrix
+     * @param ships Arraylisy
+     */
+    public boolean randomAttack(Matrix m) {
+        String[] columns = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j"};
+        HashMap<String, Integer> usedCoordinates = new HashMap<String, Integer>();
+        Random r = new Random();
+        
+        int row = r.nextInt(9);
+        String column = columns[row];
+        while (!checkCoordenate(usedCoordinates, column, row)) {
+            row = r.nextInt(9);
+            column = columns[row];
+        }
+        System.out.println("Adversário atacando em "+column+" "+row+" ... ");
+        usedCoordinates.put(column, row);
+        return this.attack(m, row, column);
     }
 
     /**

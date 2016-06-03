@@ -1,3 +1,4 @@
+package bn;
 /**
  * Created by ricardo on 21/05/16.
  */
@@ -69,7 +70,6 @@ public class Matrix {
         if (row > this.matrix.length) {
             return false;
         }
-        System.out.println("row:"+row);
         if (column > this.matrix[row].length) {
             return false;
         }
