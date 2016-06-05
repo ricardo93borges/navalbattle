@@ -1,4 +1,3 @@
-package bn;
 /**
  * Created by ricardo on 21/05/16.
  */
@@ -9,20 +8,14 @@ import java.util.Arrays;
 import java.util.Set;
 
 /**
- * TODO finalizar motodo para distribuir embarcações aleatoreamente,
  * distribuir verticalmente
  * redistribuir em exceptions
  **/
 public class Main {
 
     public static Matrix init() {
-        try {
-            Matrix m = new Matrix(10, 10);
-            return m;
-        } catch (NavalBattleException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        Matrix m = new Matrix(10, 10);
+        return m;
     }
 
     public static void main(String[] args) {
@@ -107,70 +100,6 @@ public class Main {
         }
     }
 
-    /*
-        public static void test(){
-        Scanner scanner = new Scanner(System.in);
-            Controller controller = new Controller();
-            Matrix m = init();
-
-            ArrayList<Ship> ships = controller.setShips();
-
-        String orientation="";
-        String column="";
-        int row=0;
-        boolean invalid=true;
-
-        for(Ship ship : ships){
-            invalid = true;
-            while(invalid){
-                System.out.println("Embarcação "+ship.getName()+", "+ship.getSlots()+" slots.");
-                System.out.println("Informe a orientação: \n h - Horizontal \n v - Vertical");
-                orientation = scanner.nextLine();
-                if(orientation.equals("h") || orientation.equals("v")){
-                    invalid = false;
-                    clearConsole();
-                }else{
-                    clearConsole();
-                    System.out.println("Orientação informada inválida, informe h ou v. \n");
-                }
-            }
-
-            invalid = true;
-            while(invalid){
-                Set columns = m.getColumnsLetters();
-                System.out.println("Informe a coluna:");
-                System.out.println("Colunas: "+columns.toString());
-                        column = scanner.nextLine();
-
-                if(columns.contains(column)){
-                    invalid = false;
-                    clearConsole();
-                }else{
-                    clearConsole();
-                                    System.out.println("Coluna informada inválida.\n");
-                }
-            }
-
-            invalid = true;
-            while(invalid){
-                System.out.println("Informe a linha:");
-                for(int i=0; i < m.getRows(); i++){
-                    System.out.print(i+",");
-                }
-                System.out.println();
-                String input = scanner.nextLine();
-                row = stringToInt(input);
-                if(row >= 0 && row <= m.getRows()-1){
-                    invalid = false;
-                    clearConsole();
-                }else{
-                    clearConsole();
-                                    System.out.println("Linha informada inválida.\n");
-                }
-            }
-        }
-        }
-    */
     public static boolean insertShip(Controller c, Matrix m, Ship s, int row, String col) {
         try {
             c.insertShip(s, m, row, col);

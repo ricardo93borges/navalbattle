@@ -1,4 +1,3 @@
-package bn;
 /**
  * Created by ricardo on 21/05/16.
  */
@@ -109,7 +108,6 @@ public class Controller {
      /**
      * Randomly attack
      * @param m Matrix
-     * @param ships Arraylisy
      */
     public boolean randomAttack(Matrix m) {
         String[] columns = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j"};

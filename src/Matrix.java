@@ -1,4 +1,3 @@
-package bn;
 /**
  * Created by ricardo on 21/05/16.
  */
@@ -15,10 +14,7 @@ public class Matrix {
     Map<String, Integer> mapColumns = new HashMap<String, Integer>();
 
 
-    public Matrix(int rows, int columns) throws NavalBattleException {
-        if (rows > 10 || columns > 10) {
-            throw new NavalBattleException("Only 10x10 Matrix is allowed");
-        }
+    public Matrix(int rows, int columns){
         this.rows = rows;
         this.columns = columns;
         this.matrix = new String[rows][columns];
@@ -67,29 +63,24 @@ public class Matrix {
     }
 
     public boolean set(String element, int row, int column) {
-        if (row > this.matrix.length) {
+        try {
+            if (row > this.matrix.length) {
+                return false;
+            }
+            if (column > this.matrix[row].length) {
+                return false;
+            }
+
+            this.matrix[row][column] = element;
+
+            return true;
+        }catch(ArrayIndexOutOfBoundsException e){
             return false;
         }
-        if (column > this.matrix[row].length) {
-            return false;
-        }
-
-        this.matrix[row][column] = element;
-
-        return true;
     }
 
     public String get(int row, int column) throws ArrayIndexOutOfBoundsException {
         try {
-            return this.matrix[row][column];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-    }
-
-    public String get(int row, String col) throws ArrayIndexOutOfBoundsException {
-        try {
-            int column = this.getColumn(col);
             return this.matrix[row][column];
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException();
