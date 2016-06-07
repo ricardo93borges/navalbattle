@@ -100,35 +100,6 @@ public class Main {
         }
     }
 
-    public static boolean insertShip(Controller c, Matrix m, Ship s, int row, String col) {
-        try {
-            c.insertShip(s, m, row, col);
-            return true;
-        } catch (NavalBattleException e) {
-            return false;
-        }
-    }
-
-    public static int stringToInt(String s) {
-        int n;
-        try {
-            n = Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return -1;
-        } catch (NullPointerException e) {
-            return -1;
-        }
-        return n;
-    }
-
-    public static void attack(Controller controller, Matrix m, int row, String column) {
-        if (controller.attack(m, row, column)) {
-            System.out.println("Hit");
-        } else {
-            System.out.println("Water!!!");
-        }
-    }
-
     public static void clearConsole() {
         if (System.getProperty("os.name").equals("Linux")) {
             System.out.print("\033[H\033[2J");
