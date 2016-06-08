@@ -1,3 +1,4 @@
+package navalbattle;
 /**
  * Created by ricardo on 21/05/16.
  */
@@ -37,6 +38,10 @@ public class Controller {
             }
             slots--;
         }
+        
+        //Set ship coordinates
+        ship.setColumn(col);
+        ship.setRow(row);
 
         //Insert
         slots = ship.getSlots();
