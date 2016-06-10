@@ -168,7 +168,9 @@ public class Controller {
     public HashMap loadGame(Matrix playerMatrix, Matrix computerMatrix) {        
         FileHandler fh = new FileHandler();
         String filename = "save.txt";
+        ArrayList<Object> allData = new ArrayList<Object>();
         HashMap<String, HashMap<String, Integer>> data = new HashMap<String, HashMap<String, Integer>>();
+        ArrayList<Ship> shipsColec = new ArrayList<>();
         data.put("points", new HashMap<String, Integer>());
         data.put("playerHits", new HashMap<String, Integer>());
         data.put("computerHits", new HashMap<String, Integer>());
@@ -179,23 +181,23 @@ public class Controller {
             System.out.println(file.get(i));
             String line = file.get(i);
             String[] parts = line.split(":");
-            System.out.println("part: "+parts[0]);
-            if(parts[0] == "playerPoints"){
+            if(parts.length <= 1 || parts[1].isEmpty()) continue;
+            if(parts[0].equals("playerPoints")){
                 int playerPoints = Integer.parseInt(parts[1]);
                 data.get("points").put("playerPoints", playerPoints);
-            }else if(parts[0] == "computerPoints"){
+            }else if(parts[0].equals("computerPoints")){
                 int computerPoints = Integer.parseInt(parts[1]);
-                data.get("points").put("playerPoints", computerPoints);
-            }else if(parts[0] == "player ships"){
+                data.get("points").put("computerPoints", computerPoints);
+            }else if(parts[0].equals("player ships")){
                 String[] ships = parts[1].split(";");
-                this.loadSavedShips(playerMatrix, ships);
-            }else if(parts[0] == "computer ships"){
+                this.loadSavedShips(playerMatrix, ships, shipsColec);
+            }else if(parts[0].equals("computer ships")){
                 String[] ships = parts[1].split(";");
-                this.loadSavedShips(computerMatrix, ships);
-            }else if(parts[0] == "player hits"){
+                this.loadSavedShips(computerMatrix, ships, shipsColec);
+            }else if(parts[0].equals("player hits")){
                 String[] hits = parts[1].split(";");
                 this.loadSavedHits(computerMatrix, hits, data, "playerHits");
-            }else if(parts[0] == "computer hits"){
+            }else if(parts[0].equals("computer hits")){
                 String[] hits = parts[1].split(";");
                 this.loadSavedHits(playerMatrix, hits, data, "computerHits");
             }
@@ -213,14 +215,15 @@ public class Controller {
         }
     }
     
-    public void loadSavedShips(Matrix m, String[] ships){
+    public void loadSavedShips(Matrix m, String[] ships, ArrayList<Ship> shipsColec){
         for(int j=0; j < ships.length; j++){
             String[] shipData = ships[j].split(",");
             Ship ship = new Ship(shipData[0], Integer.parseInt(shipData[2]), shipData[1].charAt(0));
             String column = shipData[3];
             int row = Integer.parseInt(shipData[4]);
+            shipsColec.add(ship);
             try{
-            this.insertShip(ship, m, row, column);
+                this.insertShip(ship, m, row, column);
             }catch(NavalBattleException e){
                 System.out.println("Error on insert ship. "+e.getMessage());
             }

@@ -45,9 +45,8 @@ public class Main {
         
         if(opt == 2){
             HashMap<String, HashMap<String, Integer>> data = controller.loadGame(playerMatrix, computerMatrix);
-            HashMap<String, Integer> points = data.get("points");
-            playerPoints = points.get("playerPoints");
-            computerPoints = points.get("computerPoints");
+            playerPoints = data.get("points").get("playerPoints");
+            computerPoints = data.get("points").get("computerPoints");
             playerHits = data.get("playerHits");
             computerHits = data.get("computerHits");
         }else{
