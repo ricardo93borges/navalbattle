@@ -8,6 +8,8 @@ package navalbattle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
@@ -74,12 +76,13 @@ public class FileHandler {
      * @throws FileNotFoundException
      * @throws UnsupportedEncodingException 
      */
-    public void erase(String file) throws FileNotFoundException, UnsupportedEncodingException{
+    public void erase(String file) throws FileNotFoundException, UnsupportedEncodingException, IOException{
         File f = new File(file);
         if(f.exists()) { 
-               PrintWriter writer = new PrintWriter(new FileOutputStream(new File(file), true));
-               writer.print("");
-               writer.close();
+            //PrintWriter writer = new PrintWriter(new FileOutputStream(new File(file), true));
+            FileWriter writer = new FileWriter(file);
+            writer.write("");
+            writer.close();
         }
     }
 }

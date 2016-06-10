@@ -4,6 +4,7 @@ package navalbattle;
  */
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -19,28 +20,18 @@ import java.util.Set;
  **/
 public class Main {
 
-    public static Matrix init() {
-        Matrix m = new Matrix(10, 10);
-        return m;
-    }
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Controller controller = new Controller();
-        Matrix playerMatrix = init();
-        Matrix computerMatrix = init();
+        Matrix playerMatrix = new Matrix(10, 10);
+        Matrix computerMatrix = new Matrix(10, 10);
+        
+        ArrayList<Ship> playerShips = new ArrayList<Ship>();
+        ArrayList<Ship> computerShips = new ArrayList<Ship>(); 
 
-        ArrayList<Ship> playerShips = controller.setShips();
-        ArrayList<Ship> computerShips = controller.setShips();
         HashMap<String, Integer> playerHits = new HashMap<String, Integer>();
         HashMap<String, Integer> computerHits = new HashMap<String, Integer>();
-        
-        controller.randomInsertShips(playerMatrix, playerShips);
-        controller.randomInsertShips(computerMatrix, computerShips);
-        
-        System.out.println(computerMatrix.display());
-        System.out.println(playerMatrix.display());
-        
+
         int opt;
         boolean run = true;
         String column = "";
@@ -53,8 +44,21 @@ public class Main {
         opt = scanner.nextInt();
         
         if(opt == 2){
-            //Load matrix, player and computer points
+            HashMap<String, HashMap<String, Integer>> data = controller.loadGame(playerMatrix, computerMatrix);
+            HashMap<String, Integer> points = data.get("points");
+            playerPoints = points.get("playerPoints");
+            computerPoints = points.get("computerPoints");
+            playerHits = data.get("playerHits");
+            computerHits = data.get("computerHits");
+        }else{
+            playerShips = controller.setShips();
+            computerShips = controller.setShips();        
+            controller.randomInsertShips(playerMatrix, playerShips);
+            controller.randomInsertShips(computerMatrix, computerShips);
         }
+        
+        System.out.println(computerMatrix.display());
+        System.out.println(playerMatrix.display());
         
         while(run){
             System.out.println("Placar ==> Você: "+playerPoints+"/14 | Adversário: "+computerPoints+"/14");
@@ -68,33 +72,28 @@ public class Main {
                     FileHandler fh = new FileHandler();
                     String filename = "save.txt";
                     //Erase file content
-                    fh.erase(filename);
+                    eraseFile(filename);
                     //Save points
                     String str = "playerPoints:"+playerPoints+"\n";
                     str += "computerPoints:"+computerPoints+"\n";
                     //Save ships
-                    str += "player ships:\n";
-                    for(int i=0; i < playerShips.size(); i++){
-                        str += playerShips.get(i).getColumn()+","+playerShips.get(i).getRow()+"\n";
-                    }
-                    str += "computer ships:\n";
-                    for(int i=0; i < computerShips.size(); i++){
-                        str += computerShips.get(i).getColumn()+","+computerShips.get(i).getRow()+"\n";
-                    }
+                    str += "player ships:";
+                    str += getShipsToSave(playerShips);
+                    str += "\ncomputer ships:";
+                    str += getShipsToSave(computerShips);
                     //Save hits
                     Iterator it = playerHits.entrySet().iterator();
-                    str += "player hits:\n";
+                    str += "\nplayer hits:";
                     while (it.hasNext()) {
                         Map.Entry pair = (Map.Entry)it.next();
-                        str += pair.getKey()+","+pair.getValue()+"\n";
+                        str += pair.getKey()+","+pair.getValue()+";";
                         it.remove();
                     }
                     it = computerHits.entrySet().iterator();
-                    str += "computer hits:\n";
+                    str += "\ncomputer hits:";
                     while (it.hasNext()) {
                         Map.Entry pair = (Map.Entry)it.next();
-                        str += pair.getKey()+","+pair.getValue()+"\n1"
-                                + "";
+                        str += pair.getKey()+","+pair.getValue()+";";
                         it.remove();
                     }
                     //save
@@ -173,6 +172,33 @@ public class Main {
                 System.out.println();
             }
         }
+    }    
+    
+    public static void eraseFile(String filename) {
+        try{
+            FileHandler fh = new FileHandler();
+            fh.erase(filename);
+        }catch(IOException e){
+            System.out.println("Error on erase file. "+e.getMessage());
+        }
     }
-
+    
+    public static String getShipsToSave(ArrayList<Ship> ships){
+        String str = "";
+        String shipName;
+        int shipSlots;
+        char shipOrientation;
+        String shipColumn;
+        int shipRow;
+        for(int i=0; i < ships.size(); i++){
+            Ship s = ships.get(i);
+            shipName = s.getName();
+            shipOrientation = s.getOrientation();
+            shipSlots = s.getSlots();
+            shipColumn = s.getColumn();
+            shipRow = s.getRow();
+            str += shipName+","+shipOrientation+","+shipSlots+","+shipColumn+","+shipRow+";";
+        }
+        return str;
+    }
 }

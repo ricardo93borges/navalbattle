@@ -3,6 +3,8 @@ package navalbattle;
  * Created by ricardo on 21/05/16.
  */
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -162,5 +164,75 @@ public class Controller {
         ships.add(new Ship("D", 2, 'H'));
         return ships;
     }
-
+    
+    public HashMap loadGame(Matrix playerMatrix, Matrix computerMatrix) {        
+        FileHandler fh = new FileHandler();
+        String filename = "save.txt";
+        HashMap<String, HashMap<String, Integer>> data = new HashMap<String, HashMap<String, Integer>>();
+        data.put("points", new HashMap<String, Integer>());
+        data.put("playerHits", new HashMap<String, Integer>());
+        data.put("computerHits", new HashMap<String, Integer>());
+        
+        ArrayList<String> file = fh.read(filename);
+        
+        for(int i=0; i<file.size(); i++){
+            System.out.println(file.get(i));
+            String line = file.get(i);
+            String[] parts = line.split(":");
+            System.out.println("part: "+parts[0]);
+            if(parts[0] == "playerPoints"){
+                int playerPoints = Integer.parseInt(parts[1]);
+                data.get("points").put("playerPoints", playerPoints);
+            }else if(parts[0] == "computerPoints"){
+                int computerPoints = Integer.parseInt(parts[1]);
+                data.get("points").put("playerPoints", computerPoints);
+            }else if(parts[0] == "player ships"){
+                String[] ships = parts[1].split(";");
+                this.loadSavedShips(playerMatrix, ships);
+            }else if(parts[0] == "computer ships"){
+                String[] ships = parts[1].split(";");
+                this.loadSavedShips(computerMatrix, ships);
+            }else if(parts[0] == "player hits"){
+                String[] hits = parts[1].split(";");
+                this.loadSavedHits(computerMatrix, hits, data, "playerHits");
+            }else if(parts[0] == "computer hits"){
+                String[] hits = parts[1].split(";");
+                this.loadSavedHits(playerMatrix, hits, data, "computerHits");
+            }
+        }
+        return data;
+    }
+    
+    public void loadSavedHits(Matrix m, String[] hits, HashMap<String, HashMap<String, Integer>> data, String key){
+        for(int j=0; j < hits.length; j++){
+            String[] hit = hits[j].split(",");
+            String column = hit[0];
+            int row = Integer.parseInt(hit[1]);
+            data.get(key).put(column, row);
+            this.attack(m, row, column);
+        }
+    }
+    
+    public void loadSavedShips(Matrix m, String[] ships){
+        for(int j=0; j < ships.length; j++){
+            String[] shipData = ships[j].split(",");
+            Ship ship = new Ship(shipData[0], Integer.parseInt(shipData[2]), shipData[1].charAt(0));
+            String column = shipData[3];
+            int row = Integer.parseInt(shipData[4]);
+            try{
+            this.insertShip(ship, m, row, column);
+            }catch(NavalBattleException e){
+                System.out.println("Error on insert ship. "+e.getMessage());
+            }
+        }
+    }
 }
+
+/*
+playerPoints:1
+computerPoints:0
+player ships:A,H,5,c,2;B,H,4,d,3;C,V,3,b,1;D,H,2,e,4;
+computer ships:A,H,5,h,2;B,V,4,b,1;C,V,3,d,3;D,H,2,e,4;
+player hits:b,1;
+computer hits:
+*/
