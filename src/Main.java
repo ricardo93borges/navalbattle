@@ -31,7 +31,8 @@ public class Main {
 
         HashMap<String, Integer> playerHits = new HashMap<String, Integer>();
         HashMap<String, Integer> computerHits = new HashMap<String, Integer>();
-
+        playerShips = controller.setShips();
+        computerShips = controller.setShips();
         int opt;
         boolean run = true;
         String column = "";
@@ -44,21 +45,27 @@ public class Main {
         opt = scanner.nextInt();
         
         if(opt == 2){
+            //Get saved data
             HashMap<String, HashMap<String, Integer>> data = controller.loadGame(playerMatrix, computerMatrix);
+            //Set points
             playerPoints = data.get("points").get("playerPoints");
             computerPoints = data.get("points").get("computerPoints");
+            //Set hits
             playerHits = data.get("playerHits");
             computerHits = data.get("computerHits");
+            //Get ship coordinates
+            HashMap<String, Integer> playerShipsCoord = data.get("playerShips");
+            HashMap<String, Integer> computerShipsCoord = data.get("computerShips");
+            //Set ships coordinates 
+            setShipsCoord(playerShipsCoord, playerShips);
+            setShipsCoord(computerShipsCoord, computerShips);
         }else{
-            playerShips = controller.setShips();
-            computerShips = controller.setShips();        
+            //Insert ships randomly
             controller.randomInsertShips(playerMatrix, playerShips);
             controller.randomInsertShips(computerMatrix, computerShips);
         }
-        
-        System.out.println(computerMatrix.display());
+        //System.out.println(computerMatrix.display());
         System.out.println(playerMatrix.display());
-        
         while(run){
             System.out.println("Placar ==> Você: "+playerPoints+"/14 | Adversário: "+computerPoints+"/14");
             System.out.println("Digite: \n 0 para sair \n 1 para atacar \n 2 para salvar e sair");
@@ -148,7 +155,7 @@ public class Main {
                 }
                 
                 //Display
-                System.out.println(computerMatrix.display());
+                //System.out.println(computerMatrix.display());
                 System.out.println(playerMatrix.display());
                 
                 //Check points
@@ -163,6 +170,9 @@ public class Main {
         }
     }
 
+    /**
+     * Clear console 
+     */
     public static void clearConsole() {
         if (System.getProperty("os.name").equals("Linux")) {
             System.out.print("\033[H\033[2J");
@@ -173,6 +183,10 @@ public class Main {
         }
     }    
     
+    /**
+     * Clear file content
+     * @param filename 
+     */
     public static void eraseFile(String filename) {
         try{
             FileHandler fh = new FileHandler();
@@ -182,6 +196,11 @@ public class Main {
         }
     }
     
+    /**
+     * Get ships to save
+     * @param ships
+     * @return 
+     */
     public static String getShipsToSave(ArrayList<Ship> ships){
         String str = "";
         String shipName;
@@ -199,5 +218,23 @@ public class Main {
             str += shipName+","+shipOrientation+","+shipSlots+","+shipColumn+","+shipRow+";";
         }
         return str;
+    }
+    
+    /**
+     * Set ships coordinates
+     * @param shipsCoord
+     * @param ships 
+     */
+    public static void setShipsCoord(HashMap<String, Integer> shipsCoord, ArrayList<Ship> ships){
+        Iterator it = shipsCoord.entrySet().iterator();
+        int c = 0;
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            //str += pair.getKey()+","+pair.getValue()+";";
+            ships.get(c).setColumn(pair.getKey().toString());
+            ships.get(c).setRow(Integer.parseInt(pair.getValue().toString()));
+            it.remove();
+            c++;
+        }
     }
 }
