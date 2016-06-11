@@ -1,0 +1,6 @@
+playerPoints:1
+computerPoints:0
+player ships:A,H,5,b,1;B,H,4,c,2;C,H,3,f,5;D,H,2,g,6;
+computer ships:A,H,5,b,1;B,H,4,c,2;C,H,3,e,4;D,H,2,f,5;
+player hits:b,1;
+computer hits:
