@@ -37,7 +37,9 @@ public class Matrix {
 
     public int getColumn(String letter) {
         try {
-            return this.mapColumns.get(letter);
+            String l = letter.toLowerCase();
+            System.out.println("l?:"+l);
+            return this.mapColumns.get(l);
         } catch (NullPointerException e) {
             throw new NullPointerException();
         }

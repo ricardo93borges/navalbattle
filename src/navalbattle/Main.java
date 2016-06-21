@@ -45,11 +45,11 @@ public class Main {
         boolean valid = false;
         while (!valid) {
             try {
-                System.out.println("Digite: \n 1 para jogar \n 2 para carregar jogo anterior \n 0 para sair");
+                System.out.println("Digite: \n 1 Para jogar \n 2 Para carregar jogo anterior \n 0 Para sair");
                 opt = scanner.nextInt();
                 valid = true;
                 if (opt == 2) {
-                    if(!controller.hasSavedData()){
+                    if (!controller.hasSavedData()) {
                         System.out.println("Não há dados salvos.");
                         valid = false;
                         continue;
@@ -86,105 +86,114 @@ public class Main {
             //System.out.println(computerMatrix.display());
             System.out.println(playerMatrix.display());
         }
-        while (run) {
-            System.out.println("Placar ==> Você: " + playerPoints + "/14 | Adversário: " + computerPoints + "/14");
-            System.out.println("Digite: \n 0 para sair \n 1 para atacar \n 2 para salvar e sair");
-            opt = scanner.nextInt();
-
-            if (opt == 0) {
-                run = false;
-            } else if (opt == 2) {
+        boolean valid2 = false;
+        while (!valid2) {
+            while (run) {
                 try {
-                    FileHandler fh = new FileHandler();
-                    String filename = "save.txt";
-                    //Erase file content
-                    eraseFile(filename);
-                    //Save points
-                    String str = "playerPoints:" + playerPoints + "\n";
-                    str += "computerPoints:" + computerPoints + "\n";
-                    //Save ships
-                    str += "player ships:";
-                    str += getShipsToSave(playerShips);
-                    str += "\ncomputer ships:";
-                    str += getShipsToSave(computerShips);
-                    //Save hits
-                    Iterator it = playerHits.entrySet().iterator();
-                    str += "\nplayer hits:";
-                    while (it.hasNext()) {
-                        Map.Entry pair = (Map.Entry) it.next();
-                        str += pair.getKey() + "," + pair.getValue() + ";";
-                        it.remove();
-                    }
-                    it = computerHits.entrySet().iterator();
-                    str += "\ncomputer hits:";
-                    while (it.hasNext()) {
-                        Map.Entry pair = (Map.Entry) it.next();
-                        str += pair.getKey() + "," + pair.getValue() + ";";
-                        it.remove();
-                    }
-                    //save
-                    fh.write(filename, str);
-                    //read
-                    ArrayList<String> file = fh.read(filename);
-                    for (int i = 0; i < file.size(); i++) {
-                        System.out.println(file.get(i));
-                    }
-                    run = false;
-                } catch (FileNotFoundException e) {
-                    System.out.println("Error on write file. " + e.getMessage());
-                } catch (UnsupportedEncodingException e) {
-                    System.out.println("Error on write file. " + e.getMessage());
-                }
-            } else {
-                valid = false;
+                    System.out.println("Placar ==> Você: " + playerPoints + "/14 | Adversário: " + computerPoints + "/14");
+                    System.out.println("Digite: \n 0 Para sair \n 1 Para atacar \n 2 Para salvar e sair");
+                    opt = scanner.nextInt();
 
-                while (!valid) {
-                    System.out.println("Digite a coluna:");
-                    column = scanner.next();
-                    if (computerMatrix.mapColumns.get(column) != null) {
-                        valid = true;
-                    }
-                }
-
-                valid = false;
-                while (!valid) {
-                    System.out.println("Digite a linha:");
-                    if (scanner.hasNextInt()) {
-                        row = scanner.nextInt();
-                        if (row >= 0 || row <= 9) {
-                            valid = true;
+                    if (opt == 0) {
+                        run = false;
+                    } else if (opt == 2) {
+                        try {
+                            FileHandler fh = new FileHandler();
+                            String filename = "save.txt";
+                            //Erase file content
+                            eraseFile(filename);
+                            //Save points
+                            String str = "playerPoints:" + playerPoints + "\n";
+                            str += "computerPoints:" + computerPoints + "\n";
+                            //Save ships
+                            str += "player ships:";
+                            str += getShipsToSave(playerShips);
+                            str += "\ncomputer ships:";
+                            str += getShipsToSave(computerShips);
+                            //Save hits
+                            Iterator it = playerHits.entrySet().iterator();
+                            str += "\nplayer hits:";
+                            while (it.hasNext()) {
+                                Map.Entry pair = (Map.Entry) it.next();
+                                str += pair.getKey() + "," + pair.getValue() + ";";
+                                it.remove();
+                            }
+                            it = computerHits.entrySet().iterator();
+                            str += "\ncomputer hits:";
+                            while (it.hasNext()) {
+                                Map.Entry pair = (Map.Entry) it.next();
+                                str += pair.getKey() + "," + pair.getValue() + ";";
+                                it.remove();
+                            }
+                            //save
+                            fh.write(filename, str);
+                            //read
+                            ArrayList<String> file = fh.read(filename);
+                            for (int i = 0; i < file.size(); i++) {
+                                System.out.println(file.get(i));
+                            }
+                            run = false;
+                        } catch (FileNotFoundException e) {
+                            System.out.println("Error on write file. " + e.getMessage());
+                        } catch (UnsupportedEncodingException e) {
+                            System.out.println("Error on write file. " + e.getMessage());
                         }
                     } else {
-                        scanner.next();
+                        valid = false;
+
+                        while (!valid) {
+                            System.out.println("Digite a coluna:");
+                            column = scanner.next();
+                            if (computerMatrix.mapColumns.get(column.toLowerCase()) != null) {
+                                valid = true;
+                            }
+                        }
+
+                        valid = false;
+                        while (!valid) {
+                            System.out.println("Digite a linha:");
+                            if (scanner.hasNextInt()) {
+                                row = scanner.nextInt();
+                                if (row >= 0 || row <= 9) {
+                                    valid = true;
+                                }
+                            } else {
+                                scanner.next();
+                            }
+                        }
+                        if (controller.attack(computerMatrix, row, column)) {
+                            playerPoints++;
+                            playerHits.put(column, row);
+                            System.out.println("Hit!");
+                        } else {
+                            System.out.println("Water!");
+                        }
+                        //Computer attack                
+                        if (controller.randomAttack(playerMatrix)) {
+                            System.out.println("Adversário acertou!");
+                            computerHits.put(column, row);
+                            computerPoints++;
+                        } else {
+                            System.out.println("Adversário errou!");
+                        }
+
+                        //Display
+                        //System.out.println(computerMatrix.display());
+                        System.out.println(playerMatrix.display());
+
+                        //Check points
+                        if (playerPoints >= 14) {
+                            System.out.println("Você venceu !!!");
+                            run = false;
+                        } else if (computerPoints >= 14) {
+                            System.out.println("Seu adversário venceu !!!");
+                            run = false;
+                        }
                     }
-                }
-                if (controller.attack(computerMatrix, row, column)) {
-                    playerPoints++;
-                    playerHits.put(column, row);
-                    System.out.println("Hit!");
-                } else {
-                    System.out.println("Water!");
-                }
-                //Computer attack                
-                if (controller.randomAttack(playerMatrix)) {
-                    System.out.println("Adversário acertou!");
-                    computerHits.put(column, row);
-                    computerPoints++;
-                } else {
-                    System.out.println("Adversário errou!");
-                }
-
-                //Display
-                //System.out.println(computerMatrix.display());
-                System.out.println(playerMatrix.display());
-
-                //Check points
-                if (playerPoints >= 14) {
-                    System.out.println("Você venceu !!!");
-                    run = false;
-                } else if (computerPoints >= 14) {
-                    System.out.println("Seu adversário venceu !!!");
-                    run = false;
+                    valid2=true;
+                } catch (InputMismatchException e) {
+                    System.out.println("Opção inválida.");
+                    scanner.nextLine();
                 }
             }
         }
