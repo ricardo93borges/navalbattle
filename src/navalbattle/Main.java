@@ -161,6 +161,7 @@ public class Main {
                                 scanner.next();
                             }
                         }
+                        clearConsole();
                         if (controller.attack(computerMatrix, row, column)) {
                             playerPoints++;
                             playerHits.put(column, row);
@@ -176,7 +177,7 @@ public class Main {
                         } else {
                             System.out.println("Adversário errou!");
                         }
-
+                        
                         //Display
                         //System.out.println(computerMatrix.display());
                         System.out.println(playerMatrix.display());
